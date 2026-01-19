@@ -46,7 +46,7 @@ endless-runner-web/
 ````
 ## 🌐 Play Online
 
-Try the game live here: [Play Bunny Endless Runner](https://endless-runner-web.vercel.app/)  
+Try the game live here: [Play Bunny Endless Runner](https://endless-runner-web-uiqt.vercel.app/)  
 
 Open the link on your **mobile browser** and tap **Add to Home Screen** to install it like a real app!
 
