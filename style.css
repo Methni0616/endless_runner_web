@@ -2,16 +2,17 @@ body {
   margin: 0;
   background: #000;
   font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
 }
 
 #game {
   width: 360px;
+  max-width: 100%;      /* mobile-friendly scaling */
   height: 520px;
-  margin: 20px auto;
   position: relative;
   overflow: hidden;
   border: 2px solid #fff;
-
   background: url("assets/background.png") repeat-x bottom;
   background-size: auto 520px;
   animation: bgScroll 6s linear infinite;
@@ -23,23 +24,23 @@ body {
 }
 
 #player {
-  width: 100px;           /* increase width */
-  height: 100px;          /* increase height */
+  width: 80px;
+  height: 80px;
   position: absolute;
   bottom: 0;
   left: 50px;
   background-image: url("assets/bunny1_stand.png");
-  background-size: contain;  /* full bunny fits */
+  background-size: contain;
   background-repeat: no-repeat;
 }
-
 
 .obstacle {
   width: 40px;
   height: 40px;
   position: absolute;
   bottom: 0;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .box {
@@ -55,9 +56,9 @@ body {
   top: 10px;
   left: 10px;
   color: #fff;
-  font-size: 24px;  /* bigger font for visibility */
+  font-size: 24px;
   font-weight: bold;
-  text-shadow: 1px 1px 3px #000; /* makes it readable on any background */
+  text-shadow: 1px 1px 3px #000;
   z-index: 10;
 }
 
