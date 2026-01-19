@@ -16,7 +16,7 @@ let obstacleInterval;
 function startRunning() {
   runInterval = setInterval(() => {
     if (gameOver) return;
-    runFrame = (runFrame % 2) + 1; // walk1 -> walk2
+    runFrame = (runFrame % 2) + 1;
     player.style.backgroundImage = `url("assets/bunny1_walk${runFrame}.png")`;
   }, 200);
 }
@@ -57,11 +57,11 @@ function createObstacle() {
 
   const obstacle = document.createElement("div");
   obstacle.classList.add("obstacle");
+  obstacle.style.right = "-60px";
 
   if (Math.random() > 0.5) obstacle.classList.add("box");
   else obstacle.classList.add("spike");
 
-  obstacle.style.right = "-60px";
   game.appendChild(obstacle);
 
   let moveInterval = setInterval(() => {
@@ -71,7 +71,8 @@ function createObstacle() {
       return;
     }
 
-    obstacle.style.right = (parseInt(obstacle.style.right) + 6) + "px";
+    let currentRight = parseFloat(obstacle.style.right);
+    obstacle.style.right = (currentRight + 6) + "px";
 
     const obsRect = obstacle.getBoundingClientRect();
     const playerRect = player.getBoundingClientRect();
@@ -86,7 +87,7 @@ function createObstacle() {
       endGame();
     }
 
-    if (obsRect.right > window.innerWidth) {
+    if (currentRight > game.clientWidth) {
       clearInterval(moveInterval);
       obstacle.remove();
     }
@@ -105,11 +106,11 @@ function startObstacles() {
 // -----------------------
 function startScore() {
   setInterval(() => {
-    if (!gameOver) {       // only increment score while playing
+    if (!gameOver) {
       score++;
-      scoreText.innerText = "Score: " + score;  // update div
+      scoreText.innerText = "Score: " + score;
     }
-  }, 1000);  // increments every 1 second
+  }, 1000);
 }
 
 // -----------------------
@@ -124,7 +125,7 @@ function endGame() {
   gameOverDiv.innerHTML = `Game Over!<br>Score: ${score}<br>Tap to Restart`;
   gameOverDiv.style.display = "block";
 
-  // REMOVE old listener and add new
+  // Remove old listener
   const newDiv = gameOverDiv.cloneNode(true);
   gameOverDiv.replaceWith(newDiv);
   gameOverDiv = document.getElementById("game-over");
@@ -135,24 +136,20 @@ function endGame() {
 // RESTART GAME
 // -----------------------
 function restartGame() {
-  // Reset variables
   score = 0;
+  scoreText.innerText = "Score: " + score;
   gameOver = false;
   runFrame = 0;
   isJumping = false;
 
-  // Remove all existing obstacles
   document.querySelectorAll(".obstacle").forEach(obs => obs.remove());
 
-  // Reset player
   player.style.bottom = "0px";
   player.style.backgroundImage = 'url("assets/bunny1_stand.png")';
 
-  // Hide Game Over overlay
   gameOverDiv.style.display = "none";
   gameOverDiv.innerHTML = "";
 
-  // Restart game loops
   startRunning();
   startObstacles();
 }
@@ -168,7 +165,7 @@ startScore();
 document.addEventListener("click", jump);
 document.addEventListener("touchstart", jump);
 
-// SERVICE WORKER (PWA)
+// SERVICE WORKER
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js")
