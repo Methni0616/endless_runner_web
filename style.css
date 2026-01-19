@@ -1,65 +1,79 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
+  margin: 0;
   background: #000;
-  color: white;
   font-family: Arial, sans-serif;
-  text-align: center;
 }
 
-#score {
-  margin: 10px;
-}
-
-/* Game area */
 #game {
   width: 360px;
   height: 520px;
-  margin: auto;
+  margin: 20px auto;
   position: relative;
   overflow: hidden;
+  border: 2px solid #fff;
 
   background: url("assets/background.png") repeat-x bottom;
-  background-size: auto 520px;  /* scale height to fit, width repeats */
+  background-size: auto 520px;
   animation: bgScroll 6s linear infinite;
-  border: 2px solid #fff;
 }
 
 @keyframes bgScroll {
   from { background-position-x: 0; }
-  to { background-position-x: 360px; } /* scroll by one tile width */
+  to { background-position-x: 360px; }
 }
 
-/* Player */
 #player {
-  width: 60px;
-  height: 90px;
+  width: 80px;           /* increase width */
+  height: 80px;          /* increase height */
   position: absolute;
   bottom: 0;
-  left: 60px;
-  background: url("assets/bunny1_ready.png") no-repeat;
-  background-size: contain;
+  left: 50px;
+  background-image: url("assets/bunny1_stand.png");
+  background-size: contain;  /* full bunny fits */
+  background-repeat: no-repeat;
 }
 
-/* Obstacles */
+
 .obstacle {
+  width: 40px;
+  height: 40px;
   position: absolute;
   bottom: 0;
-  right: -60px;
+  background-size: cover;
 }
 
 .box {
-  width: 50px;
-  height: 50px;
-  background: url("assets/box.png") no-repeat center/contain;
+  background-image: url("assets/box.png");
 }
 
 .spike {
-  width: 40px;
-  height: 40px;
-  background: url("assets/spike.png") no-repeat center/contain;
+  background-image: url("assets/spike.png");
+}
+
+#score {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #fff;
+  font-size: 24px;  /* bigger font for visibility */
+  font-weight: bold;
+  text-shadow: 1px 1px 3px #000; /* makes it readable on any background */
+  z-index: 10;
+}
+
+#game-over {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  padding: 20px 30px;
+  font-size: 24px;
+  font-weight: bold;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  text-align: center;
+  display: none;
+  z-index: 10;
 }
