@@ -1,27 +1,32 @@
 const game = document.getElementById("game");
 const player = document.getElementById("player");
 const scoreText = document.getElementById("score");
+let gameOverDiv = document.getElementById("game-over");
 
 let isJumping = false;
 let runFrame = 0;
 let runInterval;
 let score = 0;
 let gameOver = false;
+let obstacleInterval;
 
-/* Start running animation */
+// -----------------------
+// RUNNING ANIMATION
+// -----------------------
 function startRunning() {
   runInterval = setInterval(() => {
     if (gameOver) return;
-    runFrame = (runFrame % 2) + 1; // walk1 → walk2 → walk1 ...
+    runFrame = (runFrame % 2) + 1; // walk1 -> walk2
     player.style.backgroundImage = `url("assets/bunny1_walk${runFrame}.png")`;
-  }, 200); // change every 0.2s
+  }, 200);
 }
 
-/* Jump animation */
+// -----------------------
+// JUMP ANIMATION
+// -----------------------
 function jump() {
   if (isJumping || gameOver) return;
   isJumping = true;
-
   clearInterval(runInterval);
   player.style.backgroundImage = 'url("assets/bunny1_jump.png")';
 
@@ -44,7 +49,9 @@ function jump() {
   }, 20);
 }
 
-/* Create obstacles */
+// -----------------------
+// CREATE OBSTACLES
+// -----------------------
 function createObstacle() {
   if (gameOver) return;
 
@@ -54,20 +61,22 @@ function createObstacle() {
   if (Math.random() > 0.5) obstacle.classList.add("box");
   else obstacle.classList.add("spike");
 
+  obstacle.style.right = "-60px";
   game.appendChild(obstacle);
 
   let moveInterval = setInterval(() => {
     if (gameOver) {
       clearInterval(moveInterval);
       obstacle.remove();
+      return;
     }
 
-    obstacle.style.right = (parseInt(obstacle.style.right || -60) + 6) + "px";
+    obstacle.style.right = (parseInt(obstacle.style.right) + 6) + "px";
 
-    let obsRect = obstacle.getBoundingClientRect();
-    let playerRect = player.getBoundingClientRect();
+    const obsRect = obstacle.getBoundingClientRect();
+    const playerRect = player.getBoundingClientRect();
 
-    // Collision detection
+    // COLLISION DETECTION
     if (
       obsRect.left < playerRect.right &&
       obsRect.right > playerRect.left &&
@@ -77,38 +86,89 @@ function createObstacle() {
       endGame();
     }
 
-    if (obsRect.right < 0) {
+    if (obsRect.right > window.innerWidth) {
       clearInterval(moveInterval);
       obstacle.remove();
     }
   }, 20);
 }
 
-/* Spawn obstacles */
-setInterval(createObstacle, 1800);
+// -----------------------
+// SPAWN OBSTACLES
+// -----------------------
+function startObstacles() {
+  obstacleInterval = setInterval(createObstacle, 1800);
+}
 
-/* Score counter */
-setInterval(() => {
-  if (!gameOver) {
-    score++;
-    scoreText.innerText = "Score: " + score;
-  }
-}, 1000);
+// -----------------------
+// SCORE COUNTER
+// -----------------------
+function startScore() {
+  setInterval(() => {
+    if (!gameOver) {       // only increment score while playing
+      score++;
+      scoreText.innerText = "Score: " + score;  // update div
+    }
+  }, 1000);  // increments every 1 second
+}
 
-/* Game over */
+// -----------------------
+// GAME OVER
+// -----------------------
 function endGame() {
   gameOver = true;
   clearInterval(runInterval);
+  clearInterval(obstacleInterval);
   player.style.backgroundImage = 'url("assets/bunny1_hurt.png")';
-  alert("Game Over!\nScore: " + score);
-  location.reload();
+
+  gameOverDiv.innerHTML = `Game Over!<br>Score: ${score}<br>Tap to Restart`;
+  gameOverDiv.style.display = "block";
+
+  // REMOVE old listener and add new
+  const newDiv = gameOverDiv.cloneNode(true);
+  gameOverDiv.replaceWith(newDiv);
+  gameOverDiv = document.getElementById("game-over");
+  gameOverDiv.addEventListener("click", restartGame);
 }
 
-/* Start game */
+// -----------------------
+// RESTART GAME
+// -----------------------
+function restartGame() {
+  // Reset variables
+  score = 0;
+  gameOver = false;
+  runFrame = 0;
+  isJumping = false;
+
+  // Remove all existing obstacles
+  document.querySelectorAll(".obstacle").forEach(obs => obs.remove());
+
+  // Reset player
+  player.style.bottom = "0px";
+  player.style.backgroundImage = 'url("assets/bunny1_stand.png")';
+
+  // Hide Game Over overlay
+  gameOverDiv.style.display = "none";
+  gameOverDiv.innerHTML = "";
+
+  // Restart game loops
+  startRunning();
+  startObstacles();
+}
+
+// -----------------------
+// INIT GAME
+// -----------------------
 startRunning();
+startObstacles();
+startScore();
+
+// Controls
 document.addEventListener("click", jump);
 document.addEventListener("touchstart", jump);
 
+// SERVICE WORKER (PWA)
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("sw.js")
