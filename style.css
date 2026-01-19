@@ -23,8 +23,8 @@ body {
 }
 
 #player {
-  width: 80px;           /* increase width */
-  height: 80px;          /* increase height */
+  width: 100px;           /* increase width */
+  height: 100px;          /* increase height */
   position: absolute;
   bottom: 0;
   left: 50px;
