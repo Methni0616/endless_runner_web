@@ -41,8 +41,7 @@ endless-runner-web/
 ├── background.png
 ├── box.png
 ├── spike.png
-├── icon-192.png
-└── icon-512.png
+
 
 ````
 ## 🌐 Play Online
