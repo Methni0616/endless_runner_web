@@ -1,0 +1,65 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+#score {
+  margin: 10px;
+}
+
+/* Game area */
+#game {
+  width: 360px;
+  height: 520px;
+  margin: auto;
+  position: relative;
+  overflow: hidden;
+
+  background: url("assets/background.png") repeat-x bottom;
+  background-size: auto 520px;  /* scale height to fit, width repeats */
+  animation: bgScroll 6s linear infinite;
+  border: 2px solid #fff;
+}
+
+@keyframes bgScroll {
+  from { background-position-x: 0; }
+  to { background-position-x: 360px; } /* scroll by one tile width */
+}
+
+/* Player */
+#player {
+  width: 60px;
+  height: 90px;
+  position: absolute;
+  bottom: 0;
+  left: 60px;
+  background: url("assets/bunny1_ready.png") no-repeat;
+  background-size: contain;
+}
+
+/* Obstacles */
+.obstacle {
+  position: absolute;
+  bottom: 0;
+  right: -60px;
+}
+
+.box {
+  width: 50px;
+  height: 50px;
+  background: url("assets/box.png") no-repeat center/contain;
+}
+
+.spike {
+  width: 40px;
+  height: 40px;
+  background: url("assets/spike.png") no-repeat center/contain;
+}
