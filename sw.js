@@ -14,25 +14,18 @@ const assets = [
   "./assets/spike.png"
 ];
 
-// Install SW and cache assets
 self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(cacheName).then(cache => cache.addAll(assets))
-  );
+  event.waitUntil(caches.open(cacheName).then(cache => cache.addAll(assets)));
 });
 
-// Activate SW
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.map(key => {
-        if (key !== cacheName) return caches.delete(key);
-      }))
+      Promise.all(keys.map(key => key !== cacheName && caches.delete(key)))
     )
   );
 });
 
-// Fetch cached assets
 self.addEventListener("fetch", event => {
   event.respondWith(
     caches.match(event.request).then(res => res || fetch(event.request))
